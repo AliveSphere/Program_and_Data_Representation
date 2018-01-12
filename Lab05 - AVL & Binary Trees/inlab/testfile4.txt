@@ -1,0 +1,6 @@
+Alphabet bouncing creates dissonant ends for great hells incarnate, just kreating layman means necessaryfor omnipotent problem queries right so the understatement vexes william's yearning zebra, hoozah! hooray! hooplah has been made.
+
+
+/*
+Charles Buyas, cjb8qf, testfile4.txt
+The above sentence challenges the efficiency of binary trees because each new word will be added in the same direction every time, until getting past zebra, since they are in alphabetical order. An AVL tree, however, would sort them with height defference in mind and make sure to make rotations within the tree so that the tree didn't just have one really long side and a couple other things within it. This changes the run time dramatically, and highlights the issue of oredering with a binary tree. Say numbers were being added in instead, and the first 100,000 numbers got added in ascending order. This means that all 100,000 would be added in the same direction to the binary tree, so checking for values down in the 90,000's and above would be ridiculously long compared to checking them in an AVL tree, which would again rotate to accept and order the values accordingly.

@@ -1,0 +1,171 @@
+// Charles Buyas, cjb8qf, 3-2-17, analysis.pdf
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Inlab testfile4.txt:
+
+Alphabet bouncing creates dissonant ends for great hells incarnate, just kreating layman means necessaryfor omnipotent problem queries right so the understatement vexes william's yearning zebra, hoozah! hooray! hooplah has been made.
+
+
+/*
+Charles Buyas, cjb8qf, testfile4.txt
+The above sentence challenges the efficiency of binary trees because each new word will be added in the same direction every time, until getting past zebra, since they are in alphabetical order. An AVL tree, however, would sort them with height defference in mind and make sure to make rotations within the tree so that the tree didn't just have one really long side and a couple other things within it. This changes the run time dramatically, and highlights the issue of oredering with a binary tree. Say numbers were being added in instead, and the first 100,000 numbers got added in ascending order. This means that all 100,000 would be added in the same direction to the binary tree, so checking for values down in the 90,000's and above would be ridiculously long compared to checking them in an AVL tree, which would again rotate to accept and order the values accordingly.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Numerical results
+
+testfile1.txt:
+Please enter the name of a file of words: testfile1.txt
+ we can't solve problems by using the same kind of thinking we used when we created them -albert einstein
+19 words in this text
+
+
+BST: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 19
+Avg. node depth = 3
+
+AVL Tree: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 19
+Single Rotations = 2
+Double Rotations = 2
+Avg. node depth = 2
+
+        Enter word to lookup > created
+        Word was found: created
+BST: 
+Left links followed = 4
+Right links followed = 1
+Total number of nodes = 19
+Avg. node depth = 3
+
+AVL Tree: 
+Left links followed = 2
+Right links followed = 1
+Total number of nodes = 19
+Single Rotations = 2
+Double Rotations = 2
+Avg. node depth = 2
+
+testfile2.txt:
+Please enter the name of a file of words: testfile2.txt
+ a bee caught dung everywhere flying greatly higher in mauve skies than we had ever flown
+16 words in this text
+
+
+BST: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 16
+Avg. node depth = 6
+
+AVL Tree: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 16
+Single Rotations = 9
+Double Rotations = 0
+Avg. node depth = 2
+
+        Enter word to lookup > everywhere
+        Word was found: everywhere
+BST: 
+Left links followed = 0
+Right links followed = 4
+Total number of nodes = 16
+Avg. node depth = 6
+
+AVL Tree: 
+Left links followed = 2
+Right links followed = 1
+Total number of nodes = 16
+Single Rotations = 9
+Double Rotations = 0
+Avg. node depth = 2
+
+testfile3.txt:
+Please enter the name of a file of words: testfile3.txt
+ zany cobwebs littered the clockwork orange landscape like misty works of surreal art
+13 words in this text
+
+
+BST: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 13
+Avg. node depth = 3
+
+AVL Tree: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 13
+Single Rotations = 1
+Double Rotations = 2
+Avg. node depth = 2
+
+        Enter word to lookup > clockwork
+        Word was found: clockwork
+BST: 
+Left links followed = 2
+Right links followed = 0
+Total number of nodes = 13
+Avg. node depth = 3
+
+AVL Tree: 
+Left links followed = 2
+Right links followed = 0
+Total number of nodes = 13
+Single Rotations = 1
+Double Rotations = 2
+Avg. node depth = 2
+
+testfile4.txt:
+
+/**** MY TEST CASE ****/
+
+Please enter the name of a file of words: testfile4new.txt
+ alphabet bouncing creates dissonant ends for great hells incarnate just kreating layman means necessaryfor omnipotent problem queries right so the understatement vexes william's yearning zebra hoozah hooray hooplah has been made
+31 words in this text
+
+
+BST: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 31
+Avg. node depth = 11
+
+AVL Tree: 
+Left links followed = 0
+Right links followed = 0
+Total number of nodes = 31
+Single Rotations = 22
+Double Rotations = 0
+Avg. node depth = 3
+
+        Enter word to lookup > zebra
+        Word was found: zebra
+BST: 
+Left links followed = 0
+Right links followed = 24
+Total number of nodes = 31
+Avg. node depth = 11
+
+AVL Tree: 
+Left links followed = 0
+Right links followed = 4
+Total number of nodes = 31
+Single Rotations = 22
+Double Rotations = 0
+Avg. node depth = 3
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+5 & 6
+
+	There are a few things to consider when comparing binary search trees and Adelson-Velskii and Landis trees (avl trees). For example — how readable does the code have to be? — how will this be implemented? — how many values will this be expected to handle? — how much memory is too much memory for this implementation? — and so on.
+	Since getting the best possible performance is not the ultimate goal of programming, these questions can have very different answers. Binary search trees, for example, are much easier to implement and therefore have a lower chance of running into bugs in the code compared with avl trees. Binary search trees, however, have a worst case of linear run time, which is bad, but won’t always be cause for changing to avl trees. Knowing this, if you either know that you will never run into the worst case for the implementation you are working with, or just don’t care about hitting that worst case because time isn’t much of a concern for you, then you might prefer to use a binary search tree.
+	Avl trees, on the other hand, have a greater guarantee for faster speeds, but as was mentioned are harder to implement. They also require more memory, as each node has to store its height balance value that’s used when figuring out whether or not a rotation is required. Therefore, if memory storage is an issue, you might not want an avl tree. Although they have the memory stipulation, avl trees are going to faster, so if speed is an issue than avl trees are certainly the preferred choice.
