@@ -1,0 +1,45 @@
+// Charles Buyas, cjb8qf, 3-15-17, inlab6.pdf
+
+- My implementation produced the correct results
+
+- My program dropped about 10 seconds (40 to 31) when I added the -O2 flag
+
+- On my mac through the virtual box, my 250x250 was about 20 seconds and my 300x300 was about 30-31 seconds.
+
+- In my main function, I have my quad nested for loop that checks row, column, word length, and direction. Direction and word length are essentially constant, so those are negligible. Also in the for loops I call my getWordInTable method, which contains a for loop that loops through the list at the node that that element hashes to. Since this only has to go through the list at the keyed node, this time is also nearly negligible since each of the chains isn't very long. So that is constant as well. The main issue is the for loops for the rows and columns, which each has a significant run time. Because of that, I have to multiply their run times together, which results with nxn run time, or (n^2). In terms of r, c, and w, the run time would be r*c*w, but since w is essentially constant time, it would end up being r*c. So the big theta of my program is Big-Theta(r*c).
+
+- I originally couldn't figure out what was making my code slower. I check my hash function and for loops, but nothing seemed to effect it so greatly. However, while doing my inlab I noticed a part of my code that was making it much slower. I was searching for words of a size from 3 to 150, instead of 22. So in grids such as the 250x250 or 300x300 I was getting near 30 second run times. Upon changing this during the inlab, though, my run time on the 300x300 dropped by approximately 25 seconds! Now on a good run it's sub 5 second run time.
+
+  Input:
+  ./a.out words.txt 300x300.grid.txt
+  Output:
+  27409 words found
+  Found all words in 4.61037 seconds
+  4610
+  
+  Input into konsole:
+  ./a.out words2.txt 300x300.grid.txt
+  Output:
+  2855 words found
+  Found all words in 1.99493 seconds
+  1994
+  
+  
+  Input:
+  ./a.out words.txt 250x250.grid.txt
+  Output:
+  26013 words found
+  Found all words in 3.5945 seconds
+  3594
+  
+  Input:
+  ./a.out words2.txt 250x250.grid.txt
+  Output:
+  2240 words found
+  Found all words in 1.39533 seconds
+  1395
+
+
+- The shell script writing was a bit confusing at first. It seemed like a weird mix-up of makefile combined with c++ code, which really messed with me. On the one hand, it seemed useful for implementing methods in different executable ways, but seemed counter-intuitive and not worth it, considering all the different compilation options like separate .cpp files, or even just different types of clang.
+
+- All in all, I felt that this lab was heavily confusing, and I'm not sure if I really learned what I needed to from it. I got my code to work, yes, but whether or not I could do this on the fly in the future, I'm not sure. The quad nested for loops was a daunting task at the start, but upon completing I realized that was one of the easiest parts. My major takeaway was that of hash tables and functions, which I feel I now fully understand from a high level point. How to implement, when to implement, what kinds of hash functions to use, that kind of thing I understand. The part that was the strangest was just the directional stuff using the word search. Also, when I did my timed runs the first couple of times I thought my code broke my computer. 
