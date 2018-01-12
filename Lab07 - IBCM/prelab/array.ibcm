@@ -1,0 +1,49 @@
+B000 000	Charles Buyas, cjb8qf, 3-20-17, array.ibcm
+C017 001	jmp	start  skip around the vairables/spaces
+0000 002 i	dw	0      int i index
+0000 003 s	dw	0      int s
+0007 004 a	dw	007    array starts at index 005
+0000 005 zero	dw	0      value 0 in case I need to use it
+0001 006 one	dw	1      value 1 in case I need to use it
+0005 007 five	dw	5	first value in the array
+0004 008 four	dw	4	second value in the array
+0008 009 eight	dw	8	third value in the array
+000A 00A ten	dw	a	fourth value in the array
+0001 00B one	dw	1	fifth value in the array
+0000 00C c	dw	0	holds the current index when comparing max
+0005 00D n	dw	5	holds the size of the array, n
+3000 00E loit	dw	3000	used to load and then subtract in the loop
+0000 00F d	dw	0	the current greater number
+0000 010 f	dw	0	the next number in array
+0000 011 l	dw	0	stores the current largest number
+6000 012 subit	dw	6000	going to subtract with this
+0000 013			space for changes
+0000 014			space for changes
+0000 015			space for changes
+0000 016			space for changes
+300D 017 loop	load	n	if (i >= n) goto xit
+6002 018 	sub	i	subtract index from size
+E02E 019	jmpl	xit	exits from loop
+300E 01A 	load	loit	start incrementing forward
+5004 01B 	add	a	adds a to loit
+5002 01C	add	i	adds i to loit to move forward
+4027 01D	store	adit	plant current index into adit
+3002 01E 	load	i	i += 1
+5006 01F	add	one
+4002 020 	store	i	store index value
+3012 021	load	subit	increment forward for second value to subtract
+5004 022	add	a	adds a to subit
+5002 023	add	i	adds i to subit
+400C 024	store	c	holds new location in c
+4029 025	store	doit	plant instruction
+3005 026	load	0	loads 0 in accum
+0000 027 adit	dw	0
+4011 028 	store	l	makes current index the largest
+0000 029 doit	dw	0
+E02B 02A if	jumpl	xit	will go to store subit as
+300C 02B 	load	c	loads the current index
+4011 02C 	store	l	replaces l with larger number
+C017 02D 	jmp	loop	goto loop
+3011 02E xit	load	l	print l
+1800 02F 	print
+0000 030	halt

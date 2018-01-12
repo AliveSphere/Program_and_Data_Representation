@@ -1,0 +1,86 @@
+B000 000	Charles Buyas, cjb8qf, 3-22-17, bubblesort.ibcm
+C01F 001	jmp	start  skip the variables ADJUST THIS TO INDEX
+0000 002
+0000 003
+0000 004
+0000 005 		space for changes
+0000 006		
+0000 007
+0000 008
+0000 009		space for changes
+0000 00A
+0000 00B
+0000 00C
+0000 00D		space for changes
+0000 00E b	dw	0     	a[j] used to compare		
+0000 00F c	dw	0	a[j-1] used to compare a[j] and a[j-1]
+4000 010 4000	dw	gives me the dummy 4000
+3000 011 3000	dw	gives me the dummy 3000
+0001 012 1	dw	gives me the dummy 1
+0000 013 		space from changes
+0000 014 i	dw	0	index i
+0005 015 m	dw	5	max of array size
+0004 016 j	dw	4	variable j
+0000 017 temp	dw	0	temporary space for swap
+0005 018 4	dw	4	array[0]
+0004 019 3	dw	3	array[1]
+0003 01A 6	dw	6	array[2]
+0002 01B 9	dw	F	array[3]
+0001 01C 2	dw	1	array[4]
+0004 01D m-1	dw	4	max size - 1 = 4
+0018 01E a	dw	018	mem address of array[0]
+
+3011 01F 3000	load	dummy	load the number 3000
+501E 020 	add	a	adds a to accum
+5016 021 	add	j	adds j to accum
+4041 022	store	j	stores 300j to doit #1
+403C 023	store	j	stores 300j to doit #6
+6012 024	sub	1	subtracts 1 from j
+4043 025	store	j-1	stores 300j-1 to doit #2
+403A 026	store	j-1	stores 300j-1 to doit #5
+B000 027 ----	----	----	--changing from loit to stoit--
+3010 028	load	dummy	load the number 4000
+501E 029 	add	a	adds a to accum = 400a
+5016 02A	add	j	adds j to accum = 400a+j
+4044 02B	store	j	stores j into doit #3
+6012 02C	sub	1	subtracts 1 from j
+4046 02D	store	j-1	stores j-1 into doit #4
+
+B000 02E ----	----	----	--changing from stoit to outer loop--
+3015 02F 	load	m	load max array size
+6014 030	sub	i	subtract index from size
+E050 031 if	jumpl	xit	jump to halt if index > max size
+D050 032 if	jumpe	xit	jump to halt if index = max size
+301D 033	load	m-1	load max size - 1
+4016 034	store	j	reset j to max size - 1 (MIGHT BE ERROR)
+B000 035 ----	----	----	--changing from outer to inner loop--
+
+
+
+3016 036 j	load	j	loads the decremented j value
+6012 037 	sub	i	subtract i from accum (j)
+E04C 038 if	jump	loop	if i > j, jump to increment i
+D04C 039 if	jump	loop	if i = j, jump to increment i
+0000 03A doit		loit	for comparing a[j] - a[j-1] doit #5
+400F 03B 	store	c	stores val a[j-1] into c
+0000 03C doit		loit	for comparing doit #6
+400E 03D 	store	b	stores val a[j] into b
+300F 03E 	load	c	loads compare variable
+600E 03F	sub	b	subtracts b from c
+E047 040	jumpl		jumps to decrement j
+0000 041 doit		loit	loads for doit #1 == 301C
+4017 042 temp	store	a[j]	store val a[j] into temp
+0000 043 doit		loit	loads for doit #2 == 301B
+0000 044 doit		stoit	stores for doit #3 == a[j-1]
+3017 045 temp	load	a[j]	loads val a[j] from temp
+0000 046 doit		stoit	stores for doit #4 == a[j]
+3016 047 j	load	j	loads variable j
+6012 048 	sub	1	subtracts 1 from j
+4016 049 j	store	j--	stores j-- into j
+C036 04A 	jump	loop	jumps to inner loop
+B000 04B ----	----	----	--exiting the inner loop--
+3014 04C i	load	i	loads index i
+5012 04D 1	add	1	adds 1 to i
+4014 04E i	store 	i++	stores i++ into i
+C01F 04F 	jump	loop	jumps to outer loop
+0000 050	halt		halts program

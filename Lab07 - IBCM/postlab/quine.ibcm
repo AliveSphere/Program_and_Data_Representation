@@ -1,0 +1,21 @@
+C006 000	jump	jump to loop start
+0000 001 i	0	iterator starts at 0
+0015 002 m	15	code length
+3000 003 	3000	dummy variable for loit
+0001 004	1	dummy variable for incrementing
+0000 005	0	dummy variable 0
+3005 006 	0	load 0
+4001 007 i	0	store 0 into i to reset
+3002 008 loop	m	loop starts by loading code length
+6001 009 i		subtract i from m
+D014 00A jmpe	if	jump to halt if a = 0
+3003 00B 	3000	load 3000
+5001 00C i		add i to 3000
+400E 00D stoit	300i	stores i into doit
+0000 00E doit		doit will load the line at [i]
+1800 00F printh 	prints the hex at line [i]
+3001 010 i	load	loads i into accum
+5004 011 i++	add	increments i
+4001 012 i++	store	stores i++
+C008 013 jmp	j	jumps to loop start
+0000 014 halt		halts the program

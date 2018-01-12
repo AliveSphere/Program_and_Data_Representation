@@ -1,0 +1,29 @@
+B000 000	Charles Buyas, cjb8qf, 3-20-17, addition.ibcm
+C00A 001 	jmp	start  skip around the variables and additional space
+0000 002 a	dw	0      int a
+0000 003 b	dw	0      int b
+0000 004 c	dw	0      int c
+0000 005 		       opening space for changes
+0000 006		       opening space for changes
+0000 007		       opening space for changes
+0000 008		       opening space for changes
+0000 009		       opening space for changes
+1000 00A start	readH		reads in a
+4002 00B 	store	a	stores a in space 002
+1000 00C 	readH		reads in b
+4003 00D	store	b	stores b in space 003
+1000 00E	readh		reads in c
+4004 00F	store	c	stores c in space 004
+3002 010	load	a	loads a into accumulator
+5003 011	add	b	adds b to the accumulator
+5004 012	add	c	adds c to the accumulator
+1800 013 print			prints the sum that's in accum
+D016 014 if	jmpe	xit	jumps to the print commands if accum is 0
+C00A 015 loop	jmp	loop	jumps to the start of the loop
+3002 016 	load	a	loads a into the accum
+1800 017 print			prints a from accum
+3003 018 	load	b	loads b into the accum
+1800 019 print			prints b from accum
+3004 01A 	load	c	loads c into the accum
+1800 01B print			prints c from accum
+0000 01C 	halt		halt
