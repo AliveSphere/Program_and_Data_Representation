@@ -1,0 +1,49 @@
+// Charles Buyas, cjb8qf, 1-29-17, ListItr.cpp
+
+#include <iostream>
+#include "ListItr.h"
+using namespace std;
+
+ListItr::ListItr() {
+  current = new ListNode;
+}
+
+ListItr::ListItr(ListNode* theNode) {
+  current = theNode;
+}
+
+bool ListItr::isPastEnd() const {
+  if (current == NULL){
+  //if (current->next == NULL){// && current->previous != NULL) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+bool ListItr::isPastBeginning() const {
+  if (current == NULL){
+    //if (current->previous == NULL){// && current->next != NULL) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+void ListItr::moveForward() {
+  if (!isPastEnd()) {
+    current = current->next;
+  }
+}
+
+void ListItr::moveBackward() {
+  if (current->previous != NULL) {
+    current = current->previous;
+  }
+}
+
+int ListItr::retrieve() const {
+  return current->getValue();
+}
