@@ -1,0 +1,220 @@
+// Charles Buyas, cjb8qf, 3-29-17, inlab8.pdf
+
+
+
+Parameter passing.
+
+
+
+Passing values by reference in assembly:
+In assembly, the major function is the RSP, or the register that holds the stack pointer. The RSP can be subtracted from (or added, depended on the direction you are moving) so that there is extra memory sitting there for you to use. What we can do with that memory is store basically any kind of local variable we want. In order to do that, we just have to subtract enough from the RSP so that there is enough space in memory to store whatever value we want. For ints, 4, for chars, 1, etc. This way we don't overwrite the RSP (something we never want to do!). If we wanted to utilyze passing by reference like how it's used in C++, however, we have to allocate 8 bytes in memory regardless of the data type of the value we are getting. This is because what's being stored isn't the data itself, but rather a memory address of where to find that data. This is how assembly passes by reference.
+
+
+
+pbv = "pass by value"
+pbr = "pass by reference"
+
+
+
+First I looked at passing an int in assembly.
+Pass by value:
+_Z2i1i:                                 # @_Z2i1i
+	.cfi_startproc
+# BB#0:
+	mov	dword ptr [rsp - 4], edi
+	ret
+Pass by reference:
+_Z2i2Ri:                                # @_Z2i2Ri
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	ret
+
+The major difference here is the size that's being used. In pbv it uses EDI, which is only 4 bytes; whereas in pbr it uses RDI, which is all 8 bytes. For pbv, it makes space in the stack in memory by going to the memory location RSP - 4, using the '[]' to notify that what's inside is a memory location. In pbr it does the same thing but subtracts 8 for extra memory storage. This is due to the size of what you're passing. Pbv only passes the value stored in memory. In this case it's an int, which uses 4 bytes. Hence, RSP - 4. Pbr, however, passes the actual memory location of the integer, and memory addresses utilyze 8 bytes. Hence, RSP - 8.
+
+
+
+Following, I looked at passing a char in assembly.
+Pass by value:
+_Z2c1c:                                 # @_Z2c1c
+	.cfi_startproc
+# BB#0:
+	mov	al, dil
+	mov	byte ptr [rsp - 1], al
+	ret
+Pass by reference:
+_Z2c2Rc:                                # @_Z2c2Rc
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	ret
+
+Similar to an int, pbv and pbr work very similarly except for how many bytes they are utilyzing. A char is only 1 byte in size, and consequently pbv uses only 1 byte of space, RSP - 1. However another difference is present: in pbv for chars, it starts by moving the parameter into a separate space, AL. AL is then what gets moved into that space instead of DIL, which is where it goes in as a parameter. The parameter DIL gets put into the holder AL, which actually gets put into the stack.
+
+
+
+Then I looked at passing a float in assembly.
+Pass by value:
+_Z2f1f:                                 # @_Z2f1f
+	.cfi_startproc
+# BB#0:
+	movss	dword ptr [rsp - 4], xmm0
+	ret
+Pass by reference:
+_Z2f2Rf:                                # @_Z2f2Rf
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	ret
+
+Floats work nearly exactly the same as ints in assembly, except for a slight difference in pbv. It seems that with ints in pbv the int went straight into the expected register, edi, which can hold 4 bytes, which is the size of an int. And then that value gets passed into the memory space allocated through shifting the RSP. However, with floats, something named xmm0 gets passed into the initial memory space when it does pbv. This, I can only hypothesize, is the result of the float data type being stored a special way in assembly that requires it to use a special memory storage other than the registers. Hence, xmm0 is used instead of the EDI that was expected. Pbr works in the same way as both ints and chars.
+
+
+
+Then I looked at passing a pointer in assembly.
+Pass by value:
+_Z2p1Pi:                                # @_Z2p1Pi
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	ret
+
+Here I don't have a pass by reference section because I was told by a TA that passing a pointer by reference didn't make sense and wasn't necessary for this lab, as it already is the memory location of a value. Since pointers are already memory locations, there size is 8 bytes, and so we will see that passing a pointer by value is basically the same as passing any other value (int, char, float, etc) by reference, since that gives us a memory address. Therefore, the RSP gets decremented by 8 in order to fit in the memory location that the pointer is trying to store. Because of the size, the parameter gets put into RDI as well.
+
+
+
+Then I looked at passing multiple things into 1 function.
+Pass by value:
+_Z6multi1iNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE: # @_Z6multi1iNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+	.cfi_startproc
+# BB#0:
+	mov	dword ptr [rsp - 4], edi
+	mov	qword ptr [rsp - 16], rsi # 8-byte Spill
+	ret
+Pass by reference:
+_Z6multi2RiRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE: # @_Z6multi2RiRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	mov	qword ptr [rsp - 16], rsi
+	ret
+
+Here we see the same ideas portrayed in earlier cases, however we notice that with multiple arguments (parameters) we have multiple registers that are being used. And since we need to save room for multiple registers, we have to give it room for each one. The first parameter I passed in was an int, therefore it decremented (subtracted from) RSP enough space to store an int, 4. Then EDI (EDI and not RDI because only 4 bytes) moves it's value into that space. The second parameter I passed in was a string. The string was 12 chars long, and therefore required 12 bytes of space to be stored. Subtracting that from the RSP and all other moves results in RSP - 16, which gives enough space for the int before it and the string that is currently being passed in. For pbr, it did the same thing but with the data values' memory addresses, therefore 8  bytes and 8 bytes.
+
+
+
+Then I tried passing into an object from a multi-fielded class.
+Pass by value:
+_Z7object18getRekt1:                    # @_Z7object18getRekt1
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	ret
+Pass by reference:
+_Z7object2R8getRekt1:                   # @_Z7object2R8getRekt1
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	ret
+Main:
+main:                                   # @main
+	.cfi_startproc
+# BB#0:
+	sub	rsp, 24
+.Ltmp1:
+	.cfi_def_cfa_offset 32
+	lea	rdi, [rsp + 8]
+	mov	esi, 1
+	mov	edx, 2
+	mov	dword ptr [rsp + 20], 0
+	call	_ZN8getRekt1C1Eii
+	mov	rdi, qword ptr [rsp + 8]
+	mov	qword ptr [rsp], rdi
+	mov	rdi, qword ptr [rsp]
+	call	_Z7object18getRekt1
+	lea	rdi, [rsp + 8]
+	call	_Z7object2R8getRekt1
+	xor	eax, eax
+	add	rsp, 24
+	ret
+
+Here we see that pass by reference and pass by value both move the RSP 8 bytes due to the size of the inputs. Since the inputs for this were 2 separate ints at the same time, 1 int is 4 bytes, and another int is 4 bytes, which totals 8 bytes that the RSP has to leave space for in memory. In pbr we see the usual 8 bytes moved for memory address. For this one, however, I included the main file because in main there was quite a bit more going on when I used the multi-fielded object, getRekt1. In main for pbr we see that all that happens is the RSP gets moved 8 bytes as expected. However for pbv in main, there are 3 steps that occur first before it's called. It moved RSP up by 8 bytes, and then moved that into RDI, which holds parameters. Then it moved what in RDI to the return address at RSP, which is the newly shifted data. Then it puts what's in the current RSP into rdi to reset RDI, and then it calls pbv. This behavior seems arbitrary at first, but is the computers way of saving a value and getting out of the way, so that the stack pointer RSP knows where it needs to be after this function gets called.
+
+
+
+Then I evaluated how it worked with an array.
+Array function (c++):
+int array1(int a[]) {
+  int x = a[2];
+  return a[0] + a[1];
+}
+
+Array:
+int a[] = {2, 4, 5, 6};
+  array1(a);
+  
+Array function (x86):
+_Z6array1Pi:                            # @_Z6array1Pi
+	.cfi_startproc
+# BB#0:
+	mov	qword ptr [rsp - 8], rdi
+	mov	rdi, qword ptr [rsp - 8]
+	mov	eax, dword ptr [rdi + 8]
+	mov	dword ptr [rsp - 12], eax
+	mov	rdi, qword ptr [rsp - 8]
+	mov	eax, dword ptr [rdi]
+	mov	rdi, qword ptr [rsp - 8]
+	add	eax, dword ptr [rdi + 4]
+	ret
+
+Here I did two different things with my array. First, I set one of the values equal to x. In assembly it accesses the value I'm storing by decrementing the stack pointer, RSP, by 8. Since my array is of type 'int', in order for it to access the value at index 2, it has to pass over 2 separate ints first, and each one with a size of 4. So it moves over the first int with 4, and the second int with the next 4, resulting in a decrementation of 8 bytes. This, however, only gets us TO the value, and not the value itself. To do this, the code then sets the x variable (as stored in eax) to what's at memory one more decrementation down. So in the end, it grabs the value at RSP - 12. After this, it then moves on to the addition, which is easier to access. It grabs what's at a[1], in this case RSP - 8, and then stores that into rdi, which it then puts into EAX which it will use for the addition. Later it grabs what is 4 ahead of rdi, which is RSP - 8 + 4 = RSP - 4, and then it adds that to what's in EAX (RSP - 8). Then it returns.
+
+
+
+Objects.
+
+
+
+Here I assessed how data layout, data member access, and method invocation work in C++ objects in assembly. Basically in C++, when objects get declared, they are automatically put into a sequential order according to their declaration. The data members associated of course are stored along with them. Also, with different access blocks, like private and public, there is no difference in the way they are laid out in memory as access specifiers have no effect on memory layout. For data members of different classes, the data member from the different class would be shoved into one nest with all of its members in sequential order.
+Similarly for accessing data, there is no difference in how it's done between private, public, etc. The computer accesses this data using pointers to each separate object, separated by a certain displacement depending on the size of each data member.
+As for method invocation, the code again uses pointers when it recieves a method call that points to the object that calls it. Each process has its own address space and addresses are only valid within a process. In order to execute code in another process you have to insert some sort of shared library or invoke another function at an abitrary address.
+
+From this we see that C++ uses contiguous memory for data storage, no matter if its under the public or private field header. The fields therefore will stay together in a sequential clump, the same as they appear in the actual code.
+
+As for how it works in X-86 assembly, I wrote a short and simple program to run a few tests on.
+
+
+
+
+
+
+Citing:
+
+
+Useful for registers -
+
+https://www.tortall.net/projects/yasm/manual/html/arch-x86-registers.html
+
+
+Useful for special registers -
+
+http://stackoverflow.com/questions/14088228/add-a-constant-value-to-a-xmm-register-in-x86
+
+
+Useful for data layout and member access -
+
+http://stackoverflow.com/questions/19850437/general-questions-on-c-assembly-data-layout-data-member-access-methods
+
+http://stackoverflow.com/questions/405112/how-are-objects-stored-in-memory-in-c?noredirect=1&lq=1
+
+http://stackoverflow.com/questions/6441218/can-a-local-variables-memory-be-accessed-outside-its-scope?rq=1
+
+http://stackoverflow.com/questions/8297993/how-is-an-array-of-objects-stored-in-memory?rq=1
+
+
+Useful for method calling -
+
+http://www.cplusplus.com/forum/general/49575/
+
+http://stackoverflow.com/questions/8915797/calling-a-function-through-its-address-in-memory-in-c-c
+
