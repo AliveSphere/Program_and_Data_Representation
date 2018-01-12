@@ -1,0 +1,6 @@
+// Charles Buyas, cjb8qf, 1-26-15, postlab1.questions.txt
+
+1, In list.h, there appears:
+private:
+    List_Link<T> *_head, *_tail;
+which is the only thing in the 'private:' section. Why is this the only thing that's private? Or rather, of all the things utilized in making the list, why is this the only necessary private method, or I suppose constant creation?

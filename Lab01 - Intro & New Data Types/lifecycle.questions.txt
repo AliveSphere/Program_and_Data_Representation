@@ -1,0 +1,3 @@
+// Charles Buyas, cjb8qf, 1-25-17, lifecycle.questions.txt
+
+1. When defining the MyObject class, there is a line that starts with "friend". What is "friend" in this situation?

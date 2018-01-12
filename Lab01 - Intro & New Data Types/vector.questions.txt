@@ -1,0 +1,5 @@
+// Charles Buyas, cjb8qf, 1-25-17, vector.questions.txt
+
+1. There was no error when I commented out #include <iostream>.
+2. There were 11 errors when I commented out the using namespace std;. String objects, vector objects, and things like endl and cout no longer work, because they are part of the code included in the std namespace.
+3. Why are the names case sensitive in this program? I know that a and A have different ascii code, but wouldn't it be a simple matter to make both a and A an acceptable start to the name Alex?
