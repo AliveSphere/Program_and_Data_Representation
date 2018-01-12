@@ -1,0 +1,79 @@
+I was given the magic (32 bit) floating point number of -8.875.
+
+I began by converting to fraction: -8 and 7/8.
+
+I then set the sign as 1 for the negative.
+
+Next I calculated exponent:
+-8(7/8) = -71/8.
+(-71/8)/(2^3) =
+-71/(8*8) =
+-71/64
+So I figured out that 3 was the largest possible exponent.
+Add 127 to the exponent and I had 130.
+Converting this to binary: 1000 0010.
+
+Mantissa:
+-71/64 + 1 =
+-71/64 + 64/64 =
+-7/64 =
+-1/16 + -1/32 + -1/64
+So the mantissa is: 000 1110 0000 0000 0000 0000
+
+Adding the three parts together:
+1 +
+1000 0010 +
+000 1110 0000 0000 0000 0000 =
+1000 0010 0000 1110 0000 0000 0000 0000.
+
+Since this was in big endian, I had to convert to little endian.
+First I grouped it into four pairs of two groups.
+1000 0010
+0000 1110
+0000 0000
+0000 0000
+Then reverse the order of the groups.
+0000 0000
+0000 0000
+0000 1110
+1000 0010
+
+Now convert to final answer in hex:
+0x00000e82.
+
+--------------------------------------------------------------------------------
+
+My magic hex floating number was 0x00c01f40.
+
+It was in little endian, so first I converted to big endian:
+First groups: 00 c0 1f 40
+Reverse the order: 40 1f c0 00
+Number in big endian: 0x401fc000
+
+Convert from hex to binary:
+0100 0000 0001 1111 1100 0000 0000 0000
+
+Separate into the sign, exponent, and mantissa groups:
+Sign: 0
+Exponent: 100 0000 0
+Mantissa: 001 1111 1100 0000 0000 0000
+
+Sign is 0, so positive.
+
+Exponent:
+1000 0000 = 128
+128 - 127 = 1
+
+Mantissa:
+001 1111 1100 0000 0000 0000
+Bits 3, 4, 5, 6, 7, 8, 9 have a 1.
+That means (1/2) raised to the 3, 4, 5, 6, 7, 8, 9.
+(1/8) + (1/16) + (1/32) + (1/64) + (1/128) + (1/256) + (1/512) =
+(64 + 32 + 16 + 8 + 4 + 2 + 1)/512 =
+127/512 =
+0.248046875.
+Now add 1:
+Mantissa = 1.248046875.
+
+Put it all together, and the final answer as floating point is:
+1.248046875 * 2^1
