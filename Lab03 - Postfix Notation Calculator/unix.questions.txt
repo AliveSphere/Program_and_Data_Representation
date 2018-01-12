@@ -1,0 +1,3 @@
+// Charles Buyas, cjb8qf, 2-6-17, unix.questions.txt
+
+A lot of the keyboard shortcuts in the unix tutorial reference windows computers. How are the short cuts that use the escape key implemented on Macs? I tried with the escape key, and nothing really happened.
