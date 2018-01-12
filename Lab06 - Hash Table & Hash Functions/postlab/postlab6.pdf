@@ -1,0 +1,149 @@
+// Charles Buyas, cjb8qf, 3-16-17, postlab6.pdf
+
+
+
+
+- My implementation produced the correct results
+
+
+
+
+- On my mac through the virtual box, my 300x300 runtime was originally about 34 seconds, and by the end I had it down to approximately 2 seconds.
+
+
+
+
+Big-Theta:
+
+- In my main function, I have my quad nested for loop that checks row, column, word length, and direction. Direction and word length are essentially constant, so those are negligible. Also in the for loops I call my getWordInTable method, which contains a for loop that loops through the list at the node that that element hashes to. Since this only has to go through the list at the keyed node, this time is also nearly negligible since each of the chains isn't very long. So that is constant as well. The main issue is the for loops for the rows and columns, which each has a significant run time. Because of that, I have to multiply their run times together, which results with nxn run time, or (n^2). In terms of r, c, and w, the run time would be r*c*w, but since w is essentially constant time, it would end up being r*c. So the big theta of my program is Big-Theta(r*c).
+
+
+
+
+Optimization:
+
+- I originally couldn't figure out what was making my code slower. I checked my actual hash function and for-loops, but nothing seemed to effect it so greatly. However, while doing my inlab I noticed a part of my code that was making it much slower. I was searching for words of a size from 3 to 150, instead of 22. So in grids such as the 250x250 or 300x300 I was getting around 33 second run times:
+
+Original function input:
+./a.out words2.txt 300x300.grid.txt
+
+Original function output first try:
+2855 words found
+Found all words in 35.6054 seconds
+
+Original function output second try:
+2855 words found
+Found all words in 31.8612 seconds
+
+Original function output third try:
+2855 words found
+Found all words in 34.0774 seconds
+
+Upon changing this during the inlab, though, my run time on the 300x300 dropped by approximately 30 seconds! Now it averages about 2 seconds for the run time:
+
+Adjusted word length function input:
+./a.out words2.txt 300x300.grid.txt
+
+Adjusted word length function output first try:
+2855 words found
+Found all words in 1.98073 seconds
+1980 // this is the timer that was added for the inlab
+
+Adjusted word length function output second try:
+2855 words found
+Found all words in 2.01437 seconds
+2014 // this is the timer that was added for the inlab
+
+Adjusted word length function output third try:
+2855 words found
+Found all words in 2.01626 seconds
+2016 // this is the timer that was added for the inlab
+
+
+
+
+Trying to think of ways to slow down my hash function makes me think to create more collisions. However, since I used linked-list implementation for my hashtable, collisions don't make that big of a change on run-time. My original hash function takes a string and breaks it down into its characters, and then takes the ascii number associated with each character. It then totals up all of the ascii number values of that string, and then mods the word size total by the default prime number size of the hash table that I specify in my constructor:
+
+unsigned int hashtable::hashFunc(string element) {
+  int wordSizeTotal = 0;
+  int hashKey;
+  string x;
+  x = element;
+  // calculate ascii total of the string
+  for (int i = 0; i < x.length(); i++) {
+    //cout << "hello" << endl;
+    wordSizeTotal = wordSizeTotal + int(x[i]);
+  }
+  // mod by the size to get hash key
+  hashKey = wordSizeTotal % size;
+  return hashKey;
+}
+The first change I made in trying to slow it down is to only take the first character of each words' ascii value. Since there are only 26 letters (52 including upper-case), this will greatly increase the number of collisions my function should have, which should slow down the function:
+
+unsigned int hashtable::hashFunc(string element) {
+  int wordSizeTotal = 0;
+  int hashKey;
+  string x;
+  x = element;
+  wordSizeTotal = wordSizeTotal + int(x[0]);
+  hashKey = wordSizeTotal % size;
+  return hashKey;
+}
+Due to the greatly increased number of collisions, this increased the run speed by about 150%, resulting in an average of 3.3 seconds per run:
+With new hash function:
+2855 words found
+Found all words in 3.44343 seconds
+3443
+Again:
+2855 words found
+Found all words in 3.21331 seconds
+3213
+Again:
+2855 words found
+Found all words in 3.24344 seconds
+3243
+
+I changed my hash function back to the way it was before to test the different table sizes. The original size I chose to default to was 421, as this seemed like a large enough prime number without it being too large. My first test was with a much larger table size, 991. Surprisingly, this actually resulted in a very slightly slower function, due to having to alot more memory upon execution, though not by much:
+With larger size:
+2855 words found
+Found all words in 2.1465 seconds
+2146
+Again:
+2855 words found
+Found all words in 2.00456 seconds
+2004
+Again:
+2855 words found
+Found all words in 2.09744 seconds
+2097
+Although the average is only different by about .1 seconds, it is in fact slightly slower.
+I then tried with a much smaller prime number table size of 79. I found that by changing the table size in this fashion, there was again a change that was nearly negligible:
+With smaller size:
+2855 words found
+Found all words in 2.0177 seconds
+2017
+Again:
+2855 words found
+Found all words in 2.02477 seconds
+2024
+Again:
+2855 words found
+Found all words in 2.05212 seconds
+2052
+Both changes in table size resulted in a variable change of about .1 seconds, not enough to claim that there was a significant change in speed. This reassures me that my chaining method is infact nearly as effective as I can currently make it, as the larger table size didn't greatly increase the speed due to decreased collisions. The smaller table size also didn't greatly decrease the speed due to increased collisions. Just to test the upper limits of this theory, however, I changed the table size to a dramatically lower prime number of 11. The results again surprised me in a satisfactory way, in that the timing didn't change:
+2855 words found
+Found all words in 1.97735 seconds
+1977
+Again:
+2855 words found
+Found all words in 2.00932 seconds
+2009
+Again:
+2855 words found
+Found all words in 2.0465 seconds
+2046
+
+
+
+
+As far as overall speedups, the differnce between my original average time (33.3440 seconds) and my optimized average time (1.995 seconds) as a factor of speed up time is (33.3440/1.995) which is equal to (16.7137). This means that my program sped up by about 16.7137 times its original speed, after I performed my optimizations.
